@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,11 @@ import com.mifos.utils.FileUtils;
 import com.mifos.utils.SafeUIBlockingUtility;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.inject.Inject;
 
@@ -275,11 +281,15 @@ public class DocumentDialogFragment extends DialogFragment implements DocumentDi
             case FILE_SELECT_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     // Get the Uri of the selected file
-                    uri = data.getData();
-
+                    Uri uri = data.getData();
                     filePath = FileUtils.getPathReal(getActivity(), uri);
                     if (filePath != null) {
                         fileChoosen = new File(filePath);
+                    }else{
+                        filePath = FileUtils.getFileFromUri(getActivity(), uri);
+                        if(!filePath.equals("error")){
+                            fileChoosen = new File(filePath);
+                        }
                     }
 
                     if (fileChoosen != null) {
