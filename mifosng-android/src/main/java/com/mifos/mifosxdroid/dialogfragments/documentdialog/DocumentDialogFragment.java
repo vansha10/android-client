@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.mifos.api.GenericResponse;
 import com.mifos.exceptions.RequiredFieldException;
 import com.mifos.mifosxdroid.R;
@@ -36,16 +34,8 @@ import com.mifos.utils.CheckSelfPermissionAndRequest;
 import com.mifos.utils.Constants;
 import com.mifos.utils.FileUtils;
 import com.mifos.utils.SafeUIBlockingUtility;
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -285,9 +275,9 @@ public class DocumentDialogFragment extends DialogFragment implements DocumentDi
                     filePath = FileUtils.getPathReal(getActivity(), uri);
                     if (filePath != null) {
                         fileChoosen = new File(filePath);
-                    }else{
+                    } else {
                         filePath = FileUtils.getFileFromUri(getActivity(), uri);
-                        if(!filePath.equals("error")){
+                        if (!filePath.equals("error")) {
                             fileChoosen = new File(filePath);
                         }
                     }

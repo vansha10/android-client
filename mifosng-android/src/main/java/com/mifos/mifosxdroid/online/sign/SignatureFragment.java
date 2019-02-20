@@ -204,10 +204,10 @@ public class SignatureFragment extends MifosBaseFragment implements
                     filePath = FileUtils.getPathReal(getActivity(), uri);
                     if (filePath != null) {
                         signatureFile = new File(filePath);
-                    }else{
+                    } else {
                         filePath = FileUtils.getFileFromUri(getActivity(), uri);
-                        if(!filePath.equals("error")){
-                           signatureFile = new File(filePath);
+                        if (!filePath.equals("error")) {
+                            signatureFile = new File(filePath);
                         }
                     }
 

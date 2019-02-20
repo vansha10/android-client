@@ -79,25 +79,21 @@ public class FileUtils {
                 }
 
                 // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
+            } else if (isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
                 final String[] split = id.split(":");
                 final String type = split[0];
                 if ("raw".equalsIgnoreCase(type)) {
                     return split[1];
                 } else {
-                    String prefix = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? "file:///" : "content://";
+                    String prefix = Build.VERSION.SDK_INT >=
+                            Build.VERSION_CODES.O ? "file:///" : "content://";
                     final Uri contentUri = ContentUris.withAppendedId(
-                            Uri.parse(prefix + "downloads/public_downloads"), Long.valueOf(id));
+                            Uri.parse(prefix + "downloads/public_downloads"), Long.parseLong(id));
 
                     return getDataColumn(context, contentUri, null, null);
                 }
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
+            } else if (isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -118,18 +114,14 @@ public class FileUtils {
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
             // Return the remote address
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
 
             return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
 
@@ -184,7 +176,7 @@ public class FileUtils {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(column_index);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e("FileUtils", "Failed to get cursor, so return null for path", e);
         } finally {
             if (cursor != null)
@@ -193,15 +185,15 @@ public class FileUtils {
         return null;
     }
 
-    public static String getFileFromUri(Activity activity, Uri uri){
+    public static String getFileFromUri(Activity activity, Uri uri) {
         //If it can't get path of file, file is saved in cache, and obtain path from there
         try {
             String filePath = activity.getCacheDir().toString();
             String fileName = getFileNameFromUri(activity, uri);
             String path = filePath + "/" + fileName;
-            if(!fileName.equals("error") && saveFileOnCache(path, activity, uri)){
+            if (!fileName.equals("error") && saveFileOnCache(path, activity, uri)) {
                 return path;
-            }else{
+            } else {
                 return "error";
             }
         } catch (Exception e) {
@@ -210,17 +202,17 @@ public class FileUtils {
         }
     }
 
-    private static String getFileNameFromUri(Activity activity, Uri uri){
+    private static String getFileNameFromUri(Activity activity, Uri uri) {
         Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             final int column_index = cursor.getColumnIndexOrThrow("_display_name");
             return cursor.getString(column_index);
-        }else{
+        } else {
             return "error";
         }
     }
 
-    private static boolean saveFileOnCache(String path, Activity activity, Uri uri){
+    private static boolean saveFileOnCache(String path, Activity activity, Uri uri) {
         //Log.d("FileUtils", "saveFileOnCache path: "+path);
         try {
             InputStream is = activity.getContentResolver().openInputStream(uri);
@@ -232,7 +224,7 @@ public class FileUtils {
                 stream.write(buffer, 0, len);
             }
 
-            if(stream!=null)
+            if (stream != null)
                 stream.close();
 
             //Log.d("FileUtils", "saveFileOnCache done!");
@@ -243,6 +235,7 @@ public class FileUtils {
             return false;
         }
     }
+
     /**
      * This Method for getting File Mime Type
      *
